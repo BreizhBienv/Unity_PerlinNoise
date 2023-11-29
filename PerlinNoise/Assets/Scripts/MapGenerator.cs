@@ -3,44 +3,44 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
-{
-    [Range(0, 5000)]
-    public float randRangeX;
-    [Range(0, 5000)]
-    public float randRangeY;
-
-    // Width and height of the texture in pixels.
-    public int pixWidth;
-    public int pixHeight;
+{   // Width and height of the texture in pixels.
+    public int mapWidth;
+    public int mapHeight;
 
     // The number of cycles of the basic noise pattern that are repeated
     // over the width and height of the texture.
     public float scale = 1.0F;
 
-    private Texture2D noiseTex;
-    private Color[] pix;
-    public Renderer rend;
+    [Range(0, 1)]
+    public float persistance;
+    public int octaves;
+    public float lacunarity;
+
+    public int seed;
+    public Vector2 offset;
 
     public bool autoUpdate = true;
 
     public void GenerateMap()
     {
-        float randX = Random.Range(-randRangeX, randRangeX);
-        float randY = Random.Range(-randRangeY, randRangeY);
+        float[,] noiseMap = Noises.GenerateNoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset);
 
-        pix = new Color[pixWidth * pixHeight];
-        pix = Noises.GetInstance().GenerateNoiseColorMap(
-            pixWidth, pixHeight,
-            randX, randY,
-            scale);
+        MapDisplay display = FindAnyObjectByType<MapDisplay>();
+        display.DrawNoiseMap(noiseMap);
+    }
 
-        Texture2D texture = new Texture2D(pixWidth, pixHeight);
+    private void OnValidate()
+    {
+        if (mapWidth < 1)
+            mapWidth = 1;
 
-        texture.SetPixels(pix);
-        texture.Apply();
+        if (mapHeight < 1)
+            mapHeight = 1;
 
+        if (octaves < 0)
+            octaves = 0;
 
-        if (rend != null)
-            rend.sharedMaterial.mainTexture = texture;
+        if (lacunarity < 1)
+            lacunarity = 1;
     }
 }
