@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TreeEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 public sealed class Noises
@@ -46,10 +47,9 @@ public sealed class Noises
                 float xCoord = xOrg + x / pixWidth * scale;
                 float yCoord = yOrg + y / pixHeight * scale;
                 float sample = Mathf.PerlinNoise(xCoord, yCoord);
-                samples[(int)y * pixWidth + (int)x] = new Color(sample, sample, sample);
+                samples[(int)y * pixWidth + (int)x] = Color.Lerp(Color.black, Color.white, sample);
             }
         }
-
         return samples;
     }
 }

@@ -21,25 +21,26 @@ public class MapGenerator : MonoBehaviour
     private Color[] pix;
     public Renderer rend;
 
-    private void Awake()
-    {
-        // Set up the texture and a Color array to hold pixels during processing.
-        noiseTex = new Texture2D(pixWidth, pixHeight);
-        pix = new Color[noiseTex.width * noiseTex.height];
-        rend.material.mainTexture = noiseTex;
-    }
+    public bool autoUpdate = true;
 
-    private void Start()
+    public void GenerateMap()
     {
         float randX = Random.Range(-randRangeX, randRangeX);
         float randY = Random.Range(-randRangeY, randRangeY);
 
+        pix = new Color[pixWidth * pixHeight];
         pix = Noises.GetInstance().GenerateNoiseColorMap(
-            pixWidth, pixHeight, 
+            pixWidth, pixHeight,
             randX, randY,
             scale);
 
-        noiseTex.SetPixels(pix);
-        noiseTex.Apply();
+        Texture2D texture = new Texture2D(pixWidth, pixHeight);
+
+        texture.SetPixels(pix);
+        texture.Apply();
+
+
+        if (rend != null)
+            rend.sharedMaterial.mainTexture = texture;
     }
 }
