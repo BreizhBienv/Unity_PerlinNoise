@@ -20,7 +20,6 @@ public class MapGenerator : MonoBehaviour
     public float scale = 1.0F;
 
     [Header("Map Noise")]
-    
     [Range(0, 1), Tooltip("The roughness of the terrain. Lower values result in smoother terrain. Higher values result in more rugged terrain.")]
     public float persistance;
 
@@ -40,23 +39,21 @@ public class MapGenerator : MonoBehaviour
     [Tooltip("The type of map that will be generated automatically.")]
     public AutoUpdateType autoUpdateType;
 
-    public void GenerateNoiseMap()
-    {
-        float[,] noiseMap = Noises.GenerateNoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset);
-
-        MapDisplay display = FindAnyObjectByType<MapDisplay>();
-        display.DrawNoiseMap(noiseMap);
-    }
-
     public float[,] GetNoiseMap()
     {
         return Noises.GenerateNoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset);
     }
 
+    public void GenerateNoiseMap()
+    {
+        MapDisplay display = FindAnyObjectByType<MapDisplay>();
+        display.DrawNoiseMap(GetNoiseMap());
+    }
+
     public void GenerateHeightMap()
     {
         MapDisplay display = FindAnyObjectByType<MapDisplay>();
-        display.DrawHeightMap(GetNoiseMap(), mapWidth, mapHeight, terrainHeight);
+        display.DrawHeightMap(GetNoiseMap(), terrainHeight);
     }
 
     private void OnValidate()

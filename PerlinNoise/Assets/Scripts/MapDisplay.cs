@@ -8,29 +8,7 @@ using static Biomes;
 public class MapDisplay : MonoBehaviour
 {
     public Renderer rend;
-    public TerrainData terrainData;
-
-    public void DrawNoiseMap(float[,] noiseMap)
-    {
-        int width = noiseMap.GetLength(0);
-        int height = noiseMap.GetLength(1);
-
-        Texture2D texture = new Texture2D(width, height);
-
-        Color[] colourMap = new Color[width * height];
-        for (int y = 0; y < height; ++y)
-        {
-            for (int x = 0; x < width; ++x)
-            {
-                colourMap[y * width + x] = GetColor(noiseMap[x, y]);
-            }
-        }
-        texture.SetPixels(colourMap);
-        texture.Apply();
-
-        rend.sharedMaterial.mainTexture = texture;
-        rend.transform.localScale = new Vector3(width, 1, height);
-    }
+    public Terrain terrain;
 
     public Color GetColor(float sample)
     {
@@ -47,20 +25,46 @@ public class MapDisplay : MonoBehaviour
 
         return Color.Lerp(Color.black, Color.white, sample);
     }
-    
-    public void DrawHeightMap(float[,] noiseMap, int mapWidth, int mapHeight, int terrainHeight)
-    {
-        terrainData.size = new Vector3(mapWidth, terrainHeight, mapHeight);
 
-        float[,] heightMap = new float[mapWidth, mapHeight];
-        for (int y = 0; y < mapHeight; ++y)
+    public Texture2D DrawTextureNoiseMap(float[,] noiseMap)
+    {
+        int width = noiseMap.GetLength(0);
+        int height = noiseMap.GetLength(1);
+
+        Texture2D texture = new Texture2D(width, height);
+
+        Color[] colourMap = new Color[width * height];
+        for (int y = 0; y < height; ++y)
         {
-            for (int z = 0; z < mapWidth; ++z)
+            for (int x = 0; x < width; ++x)
             {
-                heightMap[z, y] = noiseMap[z, y];
+                colourMap[y * width + x] = GetColor(noiseMap[x, y]);
             }
         }
 
-        terrainData.SetHeights(0, 0, heightMap);
+        texture.SetPixels(colourMap);
+        texture.Apply();
+
+        return texture;
+    }
+
+    public void DrawNoiseMap(float[,] noiseMap)
+    {
+        int width = noiseMap.GetLength(0);
+        int height = noiseMap.GetLength(1);
+
+        rend.sharedMaterial.mainTexture = DrawTextureNoiseMap(noiseMap);
+        rend.transform.localScale = new Vector3(width, 1, height);
+    }
+    
+    public void DrawHeightMap(float[,] noiseMap, int terrainHeight)
+    {
+        int width = noiseMap.GetLength(0);
+        int height = noiseMap.GetLength(1);
+
+        terrain.terrainData.heightmapResolution = width;
+        terrain.terrainData.size = new Vector3(width, terrainHeight, height);
+        terrain.terrainData.SetHeights(0, 0, noiseMap);
+        terrain.materialTemplate.mainTexture = DrawTextureNoiseMap(noiseMap);
     }
 }
