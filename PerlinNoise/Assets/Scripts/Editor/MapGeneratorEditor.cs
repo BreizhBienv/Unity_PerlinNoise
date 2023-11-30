@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,7 +5,6 @@ using UnityEngine;
 [CustomEditor(typeof(MapGenerator))]
 public class MapGeneratorEditor : Editor
 {
-
     public override void OnInspectorGUI()
     {
         MapGenerator mapGen = (MapGenerator)target;
@@ -16,13 +13,27 @@ public class MapGeneratorEditor : Editor
         {
             if (mapGen.autoUpdate)
             {
-                mapGen.GenerateMap();
+                switch (mapGen.autoUpdateType)
+                {
+                    case MapGenerator.AutoUpdateType.Noise:
+                        mapGen.GenerateNoiseMap();
+                        break;
+                    case MapGenerator.AutoUpdateType.Height:
+                        mapGen.GenerateHeightMap();
+                        break;
+                }
+
             }
         }
 
-        if (GUILayout.Button("Generate"))
+        if (GUILayout.Button("Generate Noise Map"))
         {
-            mapGen.GenerateMap();
+            mapGen.GenerateNoiseMap();
+        }
+
+        if (GUILayout.Button("Generate Height Map"))
+        {
+            mapGen.GenerateHeightMap();
         }
     }
 }

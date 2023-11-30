@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Data.Common;
 using UnityEngine;
 using static Biomes;
 
 public class MapDisplay : MonoBehaviour
 {
     public Renderer rend;
+    public TerrainData terrainData;
 
     public void DrawNoiseMap(float[,] noiseMap)
     {
@@ -44,5 +46,21 @@ public class MapDisplay : MonoBehaviour
         }
 
         return Color.Lerp(Color.black, Color.white, sample);
+    }
+    
+    public void DrawHeightMap(float[,] noiseMap, int mapWidth, int mapHeight, int terrainHeight)
+    {
+        terrainData.size = new Vector3(mapWidth, terrainHeight, mapHeight);
+
+        float[,] heightMap = new float[mapWidth, mapHeight];
+        for (int y = 0; y < mapHeight; ++y)
+        {
+            for (int z = 0; z < mapWidth; ++z)
+            {
+                heightMap[z, y] = noiseMap[z, y];
+            }
+        }
+
+        terrainData.SetHeights(0, 0, heightMap);
     }
 }
