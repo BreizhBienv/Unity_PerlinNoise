@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -13,6 +14,7 @@ public class MapGenerator : MonoBehaviour
 
     [Range(0, 1)]
     public float persistance;
+    [Range (0, 10)]
     public int octaves;
     public float lacunarity;
 
