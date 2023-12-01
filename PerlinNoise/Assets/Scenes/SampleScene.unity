@@ -170,12 +170,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapWidth: 129
   mapHeight: 129
-  terrainHeight: 25
+  terrainHeight: 15
   scale: 20
   persistance: 0.5
   octaves: 4
-  lacunarity: 1
-  seed: 0
+  lacunarity: 2
+  seed: 20
   offset: {x: 0, y: 0}
   autoUpdate: 1
   autoUpdateType: 1
