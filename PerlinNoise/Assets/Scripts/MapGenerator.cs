@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 public class MapGenerator : MonoBehaviour
@@ -15,6 +12,12 @@ public class MapGenerator : MonoBehaviour
     {
         Basic,
         Color,
+    }
+
+    public enum RenderingStyle
+    {
+        Classic,
+        Minecraft,
     }
 
     [Header("Map Size"), Tooltip("Width and height of the texture in pixels.")]

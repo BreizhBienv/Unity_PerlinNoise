@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using TreeEditor;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 public class Noises

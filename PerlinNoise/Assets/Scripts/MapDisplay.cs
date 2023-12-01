@@ -1,10 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Data.Common;
 using UnityEngine;
-using static Biomes;
-using UnityEditor.PackageManager.UI;
 
 public class MapDisplay : MonoBehaviour
 {
