@@ -16,24 +16,23 @@ public class MapGeneratorEditor : Editor
                 switch (mapGen.autoUpdateType)
                 {
                     case MapGenerator.AutoUpdateType.Noise:
-                        mapGen.GenerateNoiseMap();
+                        mapGen.GenerateNoiseMap(mapGen.drawMode);
                         break;
                     case MapGenerator.AutoUpdateType.Height:
-                        mapGen.GenerateHeightMap();
+                        mapGen.GenerateHeightMap(mapGen.drawMode);
                         break;
                 }
-
             }
         }
 
         if (GUILayout.Button("Generate Noise Map"))
         {
-            mapGen.GenerateNoiseMap();
+            mapGen.GenerateNoiseMap(mapGen.drawMode);
         }
 
         if (GUILayout.Button("Generate Height Map"))
         {
-            mapGen.GenerateHeightMap();
+            mapGen.GenerateHeightMap(mapGen.drawMode);
         }
     }
 }

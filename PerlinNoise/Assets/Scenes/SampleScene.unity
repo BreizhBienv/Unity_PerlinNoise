@@ -171,14 +171,15 @@ MonoBehaviour:
   mapWidth: 129
   mapHeight: 129
   terrainHeight: 25
-  scale: 30
+  scale: 20
   persistance: 0.5
   octaves: 4
-  lacunarity: 2
+  lacunarity: 1
   seed: 0
   offset: {x: 0, y: 0}
   autoUpdate: 1
   autoUpdateType: 1
+  drawMode: 1
 --- !u!4 &314710885
 Transform:
   m_ObjectHideFlags: 0
@@ -610,7 +611,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 100, y: 1, z: 100}
+  m_LocalScale: {x: 129, y: 1, z: 129}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}

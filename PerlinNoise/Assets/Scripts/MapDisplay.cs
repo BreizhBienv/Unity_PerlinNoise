@@ -4,6 +4,7 @@ using System.Linq;
 using System.Data.Common;
 using UnityEngine;
 using static Biomes;
+using UnityEditor.PackageManager.UI;
 
 public class MapDisplay : MonoBehaviour
 {
@@ -13,20 +14,22 @@ public class MapDisplay : MonoBehaviour
     public Color GetColor(float sample)
     {
         Biomes biomesComp = GetComponent<Biomes>();
-        if (!biomesComp)
-            return Color.Lerp(Color.black, Color.white, sample);
+        Color currentBiome = Color.black;
 
         biomesComp.biomes.Sort((s1, s2) => s1.value.CompareTo(s2.value));
         foreach (var biome in biomesComp.biomes)
         {
             if (sample <= biome.value)
-                return biome.color;
+            {
+                currentBiome = biome.color;
+                break;
+            }
         }
 
-        return Color.Lerp(Color.black, Color.white, sample);
+        return currentBiome;
     }
 
-    public Texture2D DrawTextureNoiseMap(float[,] noiseMap)
+    public Texture2D DrawTextureNoise(float[,] noiseMap, MapGenerator.DrawType drawType)
     {
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
@@ -35,12 +38,17 @@ public class MapDisplay : MonoBehaviour
 
         Color[] colourMap = new Color[width * height];
         for (int y = 0; y < height; ++y)
-        {
             for (int x = 0; x < width; ++x)
             {
-                colourMap[y * width + x] = GetColor(noiseMap[x, y]);
+                Color color = Color.black;
+
+                if (drawType == MapGenerator.DrawType.Color)
+                    color = GetColor(noiseMap[y, x]);
+                else if (drawType == MapGenerator.DrawType.Basic)
+                    color = Color.Lerp(Color.white, Color.black, noiseMap[y, x]);
+
+                colourMap[y * width + x] = color;
             }
-        }
 
         texture.SetPixels(colourMap);
         texture.Apply();
@@ -48,16 +56,16 @@ public class MapDisplay : MonoBehaviour
         return texture;
     }
 
-    public void DrawNoiseMap(float[,] noiseMap)
+    public void DrawNoiseMap(float[,] noiseMap, MapGenerator.DrawType drawType)
     {
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
 
-        rend.sharedMaterial.mainTexture = DrawTextureNoiseMap(noiseMap);
+        rend.sharedMaterial.mainTexture = DrawTextureNoise(noiseMap, drawType);
         rend.transform.localScale = new Vector3(width, 1, height);
     }
     
-    public void DrawHeightMap(float[,] noiseMap, int terrainHeight)
+    public void DrawHeightMap(float[,] noiseMap, int terrainHeight, MapGenerator.DrawType drawType)
     {
         int width = noiseMap.GetLength(0);
         int height = noiseMap.GetLength(1);
@@ -65,6 +73,6 @@ public class MapDisplay : MonoBehaviour
         terrain.terrainData.heightmapResolution = width;
         terrain.terrainData.size = new Vector3(width, terrainHeight, height);
         terrain.terrainData.SetHeights(0, 0, noiseMap);
-        terrain.materialTemplate.mainTexture = DrawTextureNoiseMap(noiseMap);
+        terrain.materialTemplate.mainTexture = DrawTextureNoise(noiseMap, drawType);
     }
 }

@@ -11,6 +11,12 @@ public class MapGenerator : MonoBehaviour
         Height
     }
 
+    public enum DrawType
+    {
+        Basic,
+        Color,
+    }
+
     [Header("Map Size"), Tooltip("Width and height of the texture in pixels.")]
     public int mapWidth;
     public int mapHeight;
@@ -38,22 +44,24 @@ public class MapGenerator : MonoBehaviour
     public bool autoUpdate = true;
     [Tooltip("The type of map that will be generated automatically.")]
     public AutoUpdateType autoUpdateType;
+    [Tooltip("The type of draw that will be generated automatically.")]
+    public DrawType drawMode;
 
     public float[,] GetNoiseMap()
     {
         return Noises.GenerateNoiseMap(mapWidth, mapHeight, seed, scale, octaves, persistance, lacunarity, offset);
     }
 
-    public void GenerateNoiseMap()
+    public void GenerateNoiseMap(DrawType drawType)
     {
         MapDisplay display = FindAnyObjectByType<MapDisplay>();
-        display.DrawNoiseMap(GetNoiseMap());
+        display.DrawNoiseMap(GetNoiseMap(), drawType);
     }
 
-    public void GenerateHeightMap()
+    public void GenerateHeightMap(DrawType drawType)
     {
         MapDisplay display = FindAnyObjectByType<MapDisplay>();
-        display.DrawHeightMap(GetNoiseMap(), terrainHeight);
+        display.DrawHeightMap(GetNoiseMap(), terrainHeight, drawType);
     }
 
     private void OnValidate()

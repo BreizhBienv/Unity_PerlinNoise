@@ -56,7 +56,8 @@ public class Noises
 
                 if (noiseHeight > maxNoiseHeight)
                     maxNoiseHeight = noiseHeight;
-                else if (noiseHeight < minNoiseHeight)
+                
+                if (noiseHeight < minNoiseHeight)
                     minNoiseHeight = noiseHeight;
 
                 noiseMap[x, y] = noiseHeight;
